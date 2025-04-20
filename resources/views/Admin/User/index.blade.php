@@ -1,1 +1,0 @@
-@include('Admin.template.header')
