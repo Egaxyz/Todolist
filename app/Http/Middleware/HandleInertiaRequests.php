@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,5 +36,22 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
         ];
+    }
+    public function handle(Request $request, Closure $next)
+    {
+        $response = $next($request);
+
+        if ($response instanceof InertiaResponse) {
+            $response->toResponse($request)
+                     ->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')
+                     ->header('Pragma','no-cache')
+                     ->header('Expires','0');
+        } else {
+            $response->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')
+                     ->header('Pragma','no-cache')
+                     ->header('Expires','0');
+        }
+
+        return $response;
     }
 }
