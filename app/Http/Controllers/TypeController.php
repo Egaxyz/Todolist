@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class TypeController extends Controller
 {
     public function index(){
-        return inertia('Type/Index');
+        return inertia('Type');
     }
 }

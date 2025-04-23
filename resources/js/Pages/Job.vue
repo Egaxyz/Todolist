@@ -4,7 +4,7 @@ import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
-    <Head title="Type" />
+    <Head title="Job" />
     <Navbar />
-    <div>Kamu Sudah ada di Type</div>
+    <div>Kamu Sudah ada di Job</div>
 </template>

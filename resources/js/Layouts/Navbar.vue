@@ -9,24 +9,24 @@
             <!-- Navigation Links -->
             <div class="hidden md:flex space-x-6">
                 <a
-                    href="#"
+                    href="/"
                     class="hover:bg-white hover:text-blue-500 rounded-lg px-3 py-2"
-                    >Home</a
+                    >Dashboard</a
                 >
                 <a
-                    href="#"
+                    href="/type"
                     class="hover:bg-white hover:text-blue-500 rounded-lg px-3 py-2"
-                    >About</a
+                    >Type</a
                 >
                 <a
-                    href="#"
+                    href="/job"
                     class="hover:bg-white hover:text-blue-500 rounded-lg px-3 py-2"
-                    >Services</a
+                    >Job</a
                 >
                 <a
-                    href="#"
+                    href="/user"
                     class="hover:bg-white hover:text-blue-500 rounded-lg px-3 py-2"
-                    >Contact</a
+                    >User</a
                 >
             </div>
 
