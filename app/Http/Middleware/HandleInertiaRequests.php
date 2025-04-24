@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\ArrayRule;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -30,12 +31,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [
+
             'auth' => [
                 'user' => $request->user(),
             ],
-        ];
+            'success'=>fn()=>$request->session()->get('success'),
+        ]);
     }
     public function handle(Request $request, Closure $next)
     {

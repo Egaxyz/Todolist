@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Navbar from "@/Layouts/Navbar.vue";
 import { Inertia } from "@inertiajs/inertia";
-import { Head, Link } from "@inertiajs/vue3";
-import { defineProps } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { computed, defineProps, ref } from "vue";
 
 interface User {
     id: number;
@@ -13,30 +13,40 @@ interface User {
 
 const props = defineProps<{
     user: User[];
+    success?: string;
 }>();
-const deleteUser = async (userId) => {
+
+const user = ref<User[]>(props.user);
+const deleteUser = (id: number) => {
+    console.log("Deleting user with ID:", id);
     if (confirm("Are you sure you want to delete this user?")) {
-        try {
-            await Inertia.delete(route("user.destroy", userId), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    console.log("User deleted successfully");
-                },
-                onError: (errors) => {
-                    console.log("Error deleting user:", errors);
-                },
-            });
-        } catch (error) {
-            console.error("Error deleting user:", error);
-        }
+        router.delete(route("user.destroy", id), {
+            preserveState: false,
+            onSuccess: () => {
+                user.value = user.value.filter((u) => u.id !== id);
+            },
+            onError: (errors) => {
+                console.error("Error deleting user:", errors);
+            },
+        });
     }
 };
+
+const { props: pageProps } = usePage();
+const success = computed(() => pageProps.success);
 </script>
 
 <template>
     <Head title="User" />
     <Navbar />
     <div class="flex flex-col">
+        <p
+            v-if="success"
+            class="mt-4 mx-4 p-2 bg-green-100 text-green-800 rounded"
+        >
+            {{ success }}
+        </p>
+
         <div class="flex justify-between items-center p-4 bg-gray-200">
             <h1 class="text-xl font-bold">User List</h1>
             <Link

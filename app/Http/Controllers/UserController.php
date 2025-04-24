@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Email;
 use Inertia\Inertia;
+use Log;
 
 class UserController extends Controller
 {
@@ -22,34 +24,42 @@ class UserController extends Controller
     }
 public function store(Request $request)
 {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:user',
-        'password' => 'required|string|min:8',
-        'role' => 'required|in:admin,user',
-    ]);
-
     try {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:user,email',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:admin,user',
+        ]);
+        
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
+            'password'=> bcrypt($validated['password']),
             'role' => $validated['role'],
         ]);
-        
-        \Log::info('User created successfully:', $user->toArray());
+
         return redirect()->route('user.index')->with('success', 'User created successfully.');
         
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // This will automatically return JSON for Inertia requests
+        throw $e;
     } catch (\Exception $e) {
-        \Log::error('Error creating user: ' . $e->getMessage());
-        return back()->with('error', 'Error creating user: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Failed to create user: ' . $e->getMessage());
     }
 }
-    public function edit(Request $request, $id)
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return Inertia('User/Create', [
+            'editUser' => $user,
+        ]);
+    }
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:user,email,' . $id,
+            'email' => ['required', 'email', 'unique:user,email,' . $id],
             'role' => 'required|in:admin,user',
         ]);
 
@@ -60,13 +70,16 @@ public function store(Request $request)
             'role' => $request->role,
         ]);
 
-        return redirect()->back()->with('success', 'User updated successfully.');
+        return redirect()->route('user.index')->with('success', 'User updated successfully.');
     }
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect()->back()->with('success', 'User deleted successfully.');
+        $user = User::find($id);
+        if ($user) {
+         $user->delete();
+        Log::info("User deleted: " . $user->id);
+        }
+        
+        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 }

@@ -8,6 +8,6 @@ class JobController extends Controller
 {
     public function index()
     {
-        return inertia('Job');
+        return inertia('Job/Job');
     }
 }
