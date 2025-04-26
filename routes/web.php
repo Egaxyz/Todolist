@@ -16,6 +16,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
 
     Route::get('/type', [TypeController::class, 'index'])->name('type.index');
+    Route::get('/type/create', [TypeController::class, 'create'])->name('type.create');
+    Route::get('/type/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
+    Route::post('/type', [TypeController::class, 'store'])->name('type.store');
+    Route::patch('/type/{id}', [TypeController::class, 'update'])->name('type.update');
+    Route::delete('/type/{id}', [TypeController::class, 'destroy'])->name('type.destroy');
 
     Route::get('/job', [JobController::class, 'index'])->name('job.index');
 

@@ -1,17 +1,43 @@
-<script setup></script>
+<script setup lang="ts">
+import Navbar from "@/Layouts/Navbar.vue";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
+
+const props = defineProps<{
+    editType?: {
+        id: number;
+        name: string;
+        description: string;
+    };
+}>();
+const submit = () => {
+    if (props.editType) {
+        form.patch(route("type.update", props.editType.id), {
+            preserveScroll: true,
+            onSuccess: () => console.log("Type updated"),
+            onError: (e) => console.error("Update error", e),
+        });
+    } else {
+        form.post(route("type.store"), {
+            preserveScroll: true,
+            onSuccess: () => console.log("Type created"),
+            onError: (e) => console.error("Create error", e),
+        });
+    }
+};
+const form = useForm({
+    name: props.editType?.name || "",
+    description: props.editType?.description || "",
+});
+</script>
 
 <template>
-    <Head title="Create User" />
+    <Head title="Create Type" />
     <Navbar />
-    <div v-if="flash.error" class="mb-4 text-red-600 text-center">
-        {{ flash.error }}
-    </div>
-    <div v-if="flash.success" class="mb-4 text-green-600 text-center">
-        {{ flash.success }}
-    </div>
-    <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Create User</h1>
-        <form @submit.prevent="submit">
+    <form @submit.prevent="submit">
+        <div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold mb-6">
+                {{ props.editType ? "Edit Type" : "Create New Type" }}
+            </h1>
             <div class="mb-4">
                 <label
                     for="name"
@@ -22,71 +48,35 @@
                     type="text"
                     id="name"
                     v-model="form.name"
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                 />
-                <InputError :message="form.errors.name" />
             </div>
             <div class="mb-4">
                 <label
-                    for="email"
+                    for="description"
                     class="block text-sm font-medium text-gray-700"
-                    >Email</label
+                    >Description</label
                 >
-                <input
-                    type="email"
-                    id="email"
-                    v-model="form.email"
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-                <InputError :message="form.errors.email" />
-            </div>
-            <div class="mb-4">
-                <label
-                    for="password"
-                    class="block text-sm font-medium text-gray-700"
-                    >Password</label
-                >
-                <div class="relative">
-                    <input
-                        :type="showPassword ? 'text' : 'password'"
-                        id="password"
-                        v-model="form.password"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                    />
-                    <button
-                        type="button"
-                        @click.prevent="showPassword = !showPassword"
-                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
-                    >
-                        <EyeIcon v-if="!showPassword" class="h-5 w-5" />
-                        <EyeSlashIcon v-if="showPassword" class="h-5 w-5" />
-                    </button>
-                </div>
-                <InputError :message="form.errors.password" />
-            </div>
-            <div class="mb-4">
-                <label
-                    for="role"
-                    class="block text-sm font-medium text-gray-700"
-                    >Role</label
-                >
-                <select
-                    id="role"
-                    v-model="form.role"
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                >
-                    <option value="">Select Role</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
-                <InputError :message="form.errors.role" />
+                <textarea
+                    id="description"
+                    v-model="form.description"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                ></textarea>
             </div>
             <button
                 type="submit"
-                class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-                Create User
+                {{ props.editType ? "Update Type" : "Create Type" }}
             </button>
-        </form>
-    </div>
+            <div v-if="form.errors" class="text-red-500 text-sm mt-2">
+                <p v-for="(error, index) in form.errors" :key="index">
+                    {{ error }}
+                </p>
+            </div>
+            <div v-if="form.processing" class="text-blue-500 text-sm mt-2">
+                Processing...
+            </div>
+        </div>
+    </form>
 </template>

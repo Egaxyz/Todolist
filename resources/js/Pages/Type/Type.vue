@@ -1,27 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import Navbar from "@/Layouts/Navbar.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
-import { ref, onMounted } from "vue";
+import { ref, defineProps, computed } from "vue";
 
+interface Type {
+    id: number;
+    name: string;
+    description: string;
+}
+
+const props = defineProps<{
+    type: Type[];
+    success?: string;
+}>();
+
+const type = ref<Type[]>(props.type);
+
+const { props: pageProps } = usePage();
+const success = computed(() => pageProps.success);
 const deleteType = (id) => {
     if (confirm("Are you sure you want to delete this type?")) {
         Inertia.delete(`/type/${id}`);
     }
 };
-const types = ref([]); // Assuming you have a way to fetch this data from your backend
-// Fetch types from the backend when the component is mounted
-onMounted(() => {
-    Inertia.get(
-        "/type",
-        {},
-        {
-            onSuccess: (page) => {
-                types.value = page.props.types; // Assuming your backend returns the types in this format
-            },
-        }
-    );
-});
 </script>
 
 <template>
@@ -46,19 +48,19 @@ onMounted(() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(type, index) in types" :key="type.id">
+                <tr v-for="(type, index) in type" :key="type.id">
                     <td class="border px-4 py-2">{{ type.id }}</td>
                     <td class="border px-4 py-2">{{ type.name }}</td>
                     <td class="border px-4 py-2">{{ type.description }}</td>
                     <td class="border px-4 py-2">
                         <Link
-                            :href="`/type/${type.id}/edit`"
+                            :href="`/type/edit/${type.id}`"
                             class="text-blue-500 hover:underline"
                             >Edit</Link
                         >
                         <button
                             @click="deleteType(type.id)"
-                            class="text-red-500 hover:underline ml-4"
+                            class="text-red-500 hover:text-red-700 ml-2"
                         >
                             Delete
                         </button>

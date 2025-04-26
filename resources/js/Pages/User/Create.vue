@@ -71,6 +71,7 @@ const form = useForm({
                     v-model="form.name"
                     id="name"
                     type="text"
+                    autocomplete="off"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
                 <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">
@@ -89,6 +90,7 @@ const form = useForm({
                     v-model="form.email"
                     id="email"
                     type="email"
+                    autocomplete="off"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
                 <p v-if="form.errors.email" class="mt-1 text-sm text-red-600">
