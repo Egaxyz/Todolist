@@ -23,6 +23,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/type/{id}', [TypeController::class, 'destroy'])->name('type.destroy');
 
     Route::get('/job', [JobController::class, 'index'])->name('job.index');
+    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
+    Route::get('/job/edit/{id}', [JobController::class, 'edit'])->name('job.edit');
+    Route::post('/job', [JobController::class, 'store'])->name('job.store');
+    Route::patch('/job/{id}', [JobController::class, 'update'])->name('job.update');
+    Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.destroy');
 
     Route::get('/user/', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');

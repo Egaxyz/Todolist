@@ -9,8 +9,9 @@ class JobDetail extends Model
     protected $table = 'job_detail';
     protected $fillable = [
         'job_id',
-        'type_id',
-        'description',
-        'status',
+        'priority',
+        'start_date',
+        'end_date',
+        'attachment_url',
     ];
 }
