@@ -41,7 +41,7 @@ const deleteType = (id) => {
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
-                    <th class="border px-4 py-2">ID</th>
+                    <th class="border px-4 py-2">No</th>
                     <th class="border px-4 py-2">Name</th>
                     <th class="border px-4 py-2">Description</th>
                     <th class="border px-4 py-2">Actions</th>
@@ -49,7 +49,7 @@ const deleteType = (id) => {
             </thead>
             <tbody>
                 <tr v-for="(type, index) in type" :key="type.id">
-                    <td class="border px-4 py-2">{{ type.id }}</td>
+                    <td class="border px-4 py-2">{{ index + 1 }}</td>
                     <td class="border px-4 py-2">{{ type.name }}</td>
                     <td class="border px-4 py-2">{{ type.description }}</td>
                     <td class="border px-4 py-2">

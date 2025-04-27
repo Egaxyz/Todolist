@@ -67,11 +67,20 @@ class JobController extends Controller
             return redirect()->back()->with('error', 'Failed to create job: ' . $e->getMessage());
         }
     }
+    public function detail($id)
+    {
+        $job = Job::with('details')->findOrFail($id);
+        return inertia('Job/Detail', [
+            'editJob' => $job,
+        ]);
+    }
     public function edit($id)
     {
-        $job = Job::findOrFail($id);
+        $job = Job::with('details')->findOrFail($id);
+        $types = Type::all();
         return inertia('Job/Create', [
-            'editJob' => $job
+            'editJob' => $job,
+            'types' => $types,
         ]);
     }
     public function update(Request $request, Job $job, $id)
@@ -79,11 +88,26 @@ class JobController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'status' => 'required',
+            'due_to' => 'required|date',
+            'type_id' => 'required',
+            'jobs.0.priority' => 'required',
+            'jobs.0.start_date' => 'required|date',
+            'jobs.0.end_date' => 'required|date',
+            'jobs.0.url' => 'nullable|url',
+
         ]);
         $job = Job::findOrFail($id);
         $job->update([
             'name' => $request->name,
             'description' => $request->description,
+            'status' => $request->status,
+            'due_to' => $request->due_to,
+            'type_id' => $request->type_id,
+            'jobs.0.priority' => $request->jobs[0]['priority'],
+            'jobs.0.start_date' => $request->jobs[0]['start_date'],
+            'jobs.0.end_date' => $request->jobs[0]['end_date'],
+            'jobs.0.url' => $request->jobs[0]['url'],
         ]);
 
         return redirect()->route('job.index')->with('success', 'Job updated successfully');

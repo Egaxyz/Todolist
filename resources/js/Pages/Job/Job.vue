@@ -53,7 +53,7 @@ const deleteJob = (id: number) => {
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
-                    <th class="border px-4 py-2">ID</th>
+                    <th class="border px-4 py-2">No</th>
                     <th class="border px-4 py-2">Name</th>
                     <th class="border px-4 py-2">Status</th>
                     <th class="border px-4 py-2">Due To</th>
@@ -63,10 +63,21 @@ const deleteJob = (id: number) => {
             </thead>
 
             <tbody>
-                <tr v-for="item in jobs" :key="item.id">
-                    <td class="border px-4 py-2">{{ item.id }}</td>
+                <tr v-for="(item, index) in jobs" :key="item.id">
+                    <td class="border px-4 py-2">{{ index + 1 }}</td>
                     <td class="border px-4 py-2">{{ item.name }}</td>
-                    <td class="border px-4 py-2">{{ item.status }}</td>
+                    <td class="border px-4 py-2">
+                        <span v-if="item.status == 'completed'">
+                            Completed
+                        </span>
+                        <span v-else-if="item.status == 'in_progress'">
+                            In Progress
+                        </span>
+                        <span v-else-if="item.status == 'not_started'">
+                            Not Started
+                        </span>
+                        <span v-else> Failed </span>
+                    </td>
                     <td class="border px-4 py-2">{{ item.due_to }}</td>
                     <td class="border px-4 py-2">{{ item.type.name }}</td>
                     <td class="border px-4 py-2">

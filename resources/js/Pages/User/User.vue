@@ -58,7 +58,7 @@ const success = computed(() => pageProps.success);
         <table class="min-w-full bg-white border border-gray-300">
             <thead>
                 <tr>
-                    <th class="border px-4 py-2">ID</th>
+                    <th class="border px-4 py-2">No</th>
                     <th class="border px-4 py-2">Name</th>
                     <th class="border px-4 py-2">Email</th>
                     <th class="border px-4 py-2">Role</th>
@@ -67,7 +67,7 @@ const success = computed(() => pageProps.success);
             </thead>
             <tbody>
                 <tr v-for="(u, index) in user" :key="u.id">
-                    <td class="border px-4 py-2">{{ u.id }}</td>
+                    <td class="border px-4 py-2">{{ index + 1 }}</td>
                     <td class="border px-4 py-2">{{ u.name }}</td>
                     <td class="border px-4 py-2">{{ u.email }}</td>
                     <td class="border px-4 py-2">{{ u.role }}</td>

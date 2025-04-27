@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/job', [JobController::class, 'index'])->name('job.index');
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::get('/job/edit/{id}', [JobController::class, 'edit'])->name('job.edit');
+    Route::get('/job/detail/{id}', [JobController::class, 'detail'])->name('job.detail');
     Route::post('/job', [JobController::class, 'store'])->name('job.store');
     Route::patch('/job/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.destroy');
