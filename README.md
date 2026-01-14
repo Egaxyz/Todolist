@@ -43,7 +43,7 @@ Build a real-world CRUD application
 # Clone repository
 git clone https://github.com/Egaxyz/todolist.git
 
-# Masuk ke folder project
+# Open project folder
 cd todolist
 
 # Install backend dependencies
@@ -57,7 +57,9 @@ php artisan migrate
 
 # Run development server
 php artisan serve
+
 npm run dev
+
 
 
 📌 Notes
